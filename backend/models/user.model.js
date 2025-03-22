@@ -32,9 +32,9 @@ const userSchema = new mongoose.Schema(
         bio: {
             type: String
           },
-          skills: {
+          skills:[ {
             type: String
-          },
+          }],
           resume: {
             type: String
           },
@@ -57,6 +57,6 @@ const userSchema = new mongoose.Schema(
 
 
 
-const User = model("User", userSchema);
+const User = mongoose.model("User", userSchema);
 
 export default User;
