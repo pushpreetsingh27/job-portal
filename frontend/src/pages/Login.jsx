@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { setLoading } from "@/redux/authSlice";
+import { setAuthUser, setLoading } from "@/redux/authSlice";
 import { USER_API_END_P0INT } from "@/utils/constant";
 import axios from "axios";
 import React, { useState } from "react";
@@ -44,6 +44,7 @@ try {
     withCredentials :true
   })
 if(response.data.success){
+  dispatch(setAuthUser(response.data.user))
   navigate("/")
   toast.success(response.data.message)
 }

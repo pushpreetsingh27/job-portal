@@ -5,9 +5,11 @@ import { Avatar, AvatarImage } from "../ui/avatar";
 import { FaRegUser } from "react-icons/fa";
 import { LuLogOut } from "react-icons/lu";
 import { Button } from "../ui/button";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
-    const user = false
+    const {user} = useSelector(store => store.auth)
+ 
   return (
     <div className="bg-white py-3 ">
       <div className="flex justify-between max-w-7xl mx-auto">
@@ -36,13 +38,13 @@ const Navbar = () => {
                 </PopoverTrigger>
                 <PopoverContent className="w-88">
                   <div>
-                    <h3>Agam Singh</h3>
+                    <h3>{user.fullName}</h3>
                     <p className="text-gray-400">Lorem ipsum dolor sit.</p>
                   </div>
                   <div className="flex flex-col mt-2 ">
                     <div className="flex items-center">
                       <FaRegUser />
-                      <Button variant = "link">Profile</Button>
+                      <Button variant = "link"><Link to = "/profile">Profile</Link></Button>
                     </div>
                     <div className="flex  items-center">
                       <LuLogOut />
