@@ -5,7 +5,7 @@ import { Label } from './ui/label'
 const filterData = [
     {
         filterType: "Location",
-        items : ["Delhi" , "Bamglore" , "Hyderabad" , "Pune" ,"Chennai" , "Mumbai"]
+        items : ["Delhi" , "Banglore" , "Hyderabad" , "Pune" ,"Chennai" , "Mumbai"]
      },
     {
         filterType: "Industry",

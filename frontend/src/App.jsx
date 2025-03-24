@@ -7,6 +7,7 @@ import { Toaster } from 'react-hot-toast'
 import Jobs from './pages/Jobs'
 import Browse from './pages/Browse'
 import Profile from './pages/Profile'
+import JobDescription from './pages/JobDescription'
 
 
 const router = createBrowserRouter([
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
   {
     path : "/profile",
     element :<Profile  />
+  },
+  {
+    path : "/description/:id",
+    element :<JobDescription />
   },
 ])
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -6,8 +6,13 @@ import { FaUser, FaEnvelope, FaBriefcase, FaFileAlt, FaUserTag, FaEdit } from "r
 import { AiFillSetting } from "react-icons/ai";
 import Navbar from "@/components/shared/Navbar";
 import AppliedJobs from "@/components/AppliedJobs";
+import EditProfileDialog from "@/components/EditProfileDialog";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
+const [open , setOpen] = useState(false)
+const {user} = useSelector(store => store.auth)
+
   const profile = {
     fullname: "John Doe",
     description: "Passionate Frontend Developer skilled in React & Tailwind.",
@@ -25,6 +30,7 @@ const Profile = () => {
     <div className="max-w-5xl mx-auto p-8 bg-white shadow-2xl rounded-lg border border-gray-200 relative">
       {/* Edit Button */}
       <Button
+      onClick = {()=> setOpen(true)}
         variant="outline"
         size="icon"
         className="absolute top-4 right-4 border-gray-300 hover:bg-blue-50"
@@ -35,17 +41,17 @@ const Profile = () => {
       {/* Avatar & User Info */}
       <div className="flex items-center gap-6 mb-8">
         <Avatar className="w-28 h-28 shadow-lg">
-          <AvatarImage src={profile.avatarUrl} alt={profile.fullname} />
+          <AvatarImage src={profile.avatarUrl} alt={user?.fullname} />
           <AvatarFallback>JD</AvatarFallback>
         </Avatar>
         <div>
           <h2 className="text-3xl font-bold text-gray-800 flex items-center gap-2">
-            <FaUser className="text-blue-500" /> {profile.fullname}
+            <FaUser className="text-blue-500" /> {user?.fullName}
           </h2>
           <p className="text-lg text-gray-500 flex items-center gap-2 mt-1">
-            <FaBriefcase className="text-green-500" /> {profile.role}
+            {/* <FaBriefcase className="text-green-500" /> {profile.role} */}
           </p>
-          <p className="text-md text-gray-500 mt-2">{profile.description}</p>
+          <p className="text-md text-gray-500 mt-2">{user?.profile?.bio}</p>
         </div>
       </div>
 
@@ -55,7 +61,7 @@ const Profile = () => {
         <div className="flex items-center gap-2">
           <FaUserTag className="text-green-500" />
           <p className="text-md text-gray-700">
-            <span className="font-bold">Role:</span> {profile.role}
+            {/* <span className="font-bold">Role:</span> {profile.role} */}
           </p>
         </div>
 
@@ -63,7 +69,7 @@ const Profile = () => {
         <div className="flex items-center gap-2">
           <FaEnvelope className="text-red-500" />
           <p className="text-md text-gray-700">
-            <span className="font-bold">Email:</span> {profile.email}
+            <span className="font-bold">Email:</span> {user?.email}
           </p>
         </div>
 
@@ -73,7 +79,7 @@ const Profile = () => {
           <div>
             <p className="text-md text-gray-700 font-bold mb-2">Skills:</p>
             <div className="flex flex-wrap gap-2">
-              {profile.skills.map((skill, index) => (
+              {user?.profile?.skills.map((skill, index) => (
                 <Badge
                   key={index}
                   variant="outline"
@@ -90,7 +96,7 @@ const Profile = () => {
         <div className="flex items-center gap-2">
           <FaFileAlt className="text-indigo-500" />
           <div className="text-md text-gray-700 flex items-center gap-4 bg-gray-100 p-2 rounded-md shadow-sm">
-            📄 {profile.resume}
+            📄 {user?.resume}
           </div>
         </div>
       </div>
@@ -100,6 +106,9 @@ const Profile = () => {
       
         <AppliedJobs/>
     </div>
+    {
+     open && <EditProfileDialog open ={open} setOpen = {setOpen}/>
+    }
     </div>
   );
 };
