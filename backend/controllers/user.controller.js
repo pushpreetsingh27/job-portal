@@ -1,10 +1,13 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import getDataUri from "../utils/datauri.js";
+import cloudinary from "../utils/cloudinary.js";
 
 export const signUp = async (req, res) => {
     try {
         const{fullName , email ,phone , password , role} = req.body;
+
 
         if(!fullName || !email || !phone || !password || !role){
             return res.status(400).json({
@@ -126,6 +129,10 @@ export const updateProfile = async (req , res) =>{
     try{
         const { fullName , email , phone ,bio ,skills } = req.body;
         const file = req.file
+
+        const fileuri = getDataUri(file);
+
+        const cloudResponse = await cloudinary.uploader.upload(fileuri.content)
       
 
       let skillsArray

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { FaUser, FaEnvelope, FaBriefcase, FaFileAlt, FaUserTag, FaEdit } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaBriefcase, FaFileAlt, FaEdit , FaPhone } from "react-icons/fa";
 import { AiFillSetting } from "react-icons/ai";
 import Navbar from "@/components/shared/Navbar";
 import AppliedJobs from "@/components/AppliedJobs";
@@ -13,15 +13,7 @@ const Profile = () => {
 const [open , setOpen] = useState(false)
 const {user} = useSelector(store => store.auth)
 
-  const profile = {
-    fullname: "John Doe",
-    description: "Passionate Frontend Developer skilled in React & Tailwind.",
-    role: "Student",
-    email: "john.doe@example.com",
-    skills: ["React", "JavaScript", "Tailwind", "Node.js"],
-    resume: "john_doe_resume.pdf",
-    avatarUrl: "https://avatars.githubusercontent.com/u/583231?v=4", // Placeholder Avatar
-  };
+ 
 
   return (
     <div>
@@ -41,7 +33,7 @@ const {user} = useSelector(store => store.auth)
       {/* Avatar & User Info */}
       <div className="flex items-center gap-6 mb-8">
         <Avatar className="w-28 h-28 shadow-lg">
-          <AvatarImage src={profile.avatarUrl} alt={user?.fullname} />
+          {/* <AvatarImage src={profile.avatarUrl} alt={user?.fullname} /> */}
           <AvatarFallback>JD</AvatarFallback>
         </Avatar>
         <div>
@@ -59,9 +51,9 @@ const {user} = useSelector(store => store.auth)
       <div className="space-y-6">
         {/* Role */}
         <div className="flex items-center gap-2">
-          <FaUserTag className="text-green-500" />
+          <FaPhone className="text-green-500" />
           <p className="text-md text-gray-700">
-            {/* <span className="font-bold">Role:</span> {profile.role} */}
+            <span className="font-bold">Phone:</span> {user?.phone}
           </p>
         </div>
 
