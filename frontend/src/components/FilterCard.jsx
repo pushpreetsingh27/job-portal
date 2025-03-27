@@ -27,7 +27,7 @@ const FilterCard = () => {
         {
             filterData.map((data ,index)=>{
                 return(
-                    <div>
+                    <div key = {index}>
                         <h2 className='font-bold text-lg'>{data.filterType}</h2>
                         {
                           data.items.map((item,index) =>{

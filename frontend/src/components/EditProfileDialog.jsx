@@ -18,62 +18,60 @@ import { setAuthUser } from "@/redux/authSlice";
 import toast from "react-hot-toast";
 
 const EditProfileDialog = ({ open, setOpen }) => {
-    const {user} = useSelector(store => store.auth)
-    const dispatch = useDispatch();
-    const [input , setInput] = useState({
-        fullName : user?.fullName,
-        email : user?.email,
-        phone : user?.phone,
-        bio : user?.profile?.bio,
-        skills : user?.profile?.skills?.map(skills => skills),
-        file : user?.profile?.resume
-    })
+  const { user } = useSelector((store) => store.auth);
+  const dispatch = useDispatch();
+  const [input, setInput] = useState({
+    fullName: user?.fullName,
+    email: user?.email,
+    phone: user?.phone,
+    bio: user?.profile?.bio,
+    skills: user?.profile?.skills?.map((skills) => skills),
+    file: user?.profile?.resume,
+  });
 
-    const handleEvenChange = (e) => {
-      setInput({...input , [e.target.name]: e.target.value})
-    }
-    const handleFormSubmit =  async (e) => {
+  const handleEvenChange = (e) => {
+    setInput({ ...input, [e.target.name]: e.target.value });
+  };
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append('fullName', input.fullName);
-    formData.append('email', input.email);
-    formData.append('phone', input.phone);
-    formData.append('bio', input.bio);
-    formData.append('skills', input.skills);
-    if(input.file){
-        formData.append('file', input.file);
+    formData.append("fullName", input.fullName);
+    formData.append("email", input.email);
+    formData.append("phone", input.phone);
+    formData.append("bio", input.bio);
+    formData.append("skills", input.skills);
+    if (input.file) {
+      formData.append("file", input.file);
     }
 
     try {
-       const response = await axios.post(`${USER_API_END_P0INT}/profile/update`, formData ,{
-        headers :{
-            'Content-Type' : 'multipart/form-data',
-        },
-        withCredentials: true
-       }) 
+      const response = await axios.post(
+        `${USER_API_END_P0INT}/profile/update`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
 
-       if(response.data.success){
-          dispatch(setAuthUser(response.data.user));
-          toast.success(response.data.message)
-       }
-
+      if (response.data.success) {
+        dispatch(setAuthUser(response.data.user));
+        toast.success(response.data.message);
+      }
     } catch (error) {
-        console.log(error);
-        toast.error(error.response.data.message)
-        
+      console.log(error);
+      toast.error(error.response.data.message);
     }
-    setOpen(false)
-    console.log("Input is - " , input);
+    setOpen(false);
+    console.log("Input is - ", input);
+  };
 
-}
-
-    const handleFileChange = (e) =>{
-        setInput({...input , file : e.target.files?.[0] })
-    }
-
-    
-
+  const handleFileChange = (e) => {
+    setInput({ ...input, file: e.target.files?.[0] });
+  };
 
   return (
     <div>
@@ -94,11 +92,11 @@ const EditProfileDialog = ({ open, setOpen }) => {
               </Label>
               <Input
                 id="name"
-                value ={input.fullName}
-                type = "text"
+                value={input.fullName}
+                type="text"
                 name="fullName"
                 placeholder="Enter your full name"
-                onChange = {handleEvenChange}
+                onChange={handleEvenChange}
                 className="w-full"
               />
             </div>
@@ -110,11 +108,11 @@ const EditProfileDialog = ({ open, setOpen }) => {
               </Label>
               <Input
                 id="email"
-                value ={input.email}
+                value={input.email}
                 name="email"
                 type="email"
                 placeholder="Enter your email"
-                onChange = {handleEvenChange}
+                onChange={handleEvenChange}
                 className="w-full"
               />
             </div>
@@ -126,10 +124,10 @@ const EditProfileDialog = ({ open, setOpen }) => {
               </Label>
               <Textarea
                 id="bio"
-                value ={input.bio}
+                value={input.bio}
                 name="bio"
                 placeholder="Write a short bio..."
-                onChange = {handleEvenChange}
+                onChange={handleEvenChange}
                 className="w-full"
               />
             </div>
@@ -141,25 +139,26 @@ const EditProfileDialog = ({ open, setOpen }) => {
               </Label>
               <Input
                 id="skills"
-                value ={input.skills}
+                value={input.skills}
                 name="skills"
                 placeholder="Add skills (comma separated)"
-                onChange = {handleEvenChange}
+                onChange={handleEvenChange}
                 className="w-full"
               />
             </div>
 
             {/* Resume */}
             <div className="grid gap-2">
-              <Label htmlFor="resume" className="text-gray-700 font-semibold">
+              <Label htmlFor="file" className="text-right">
                 Resume
               </Label>
               <Input
-                id="resume"
-                name="resume"
+                id="file"
+                name="file"
                 type="file"
-                onChange = {handleFileChange}
-                className="w-full"
+                accept="application/pdf"
+                onChange={handleFileChange}
+                className="col-span-3"
               />
             </div>
 

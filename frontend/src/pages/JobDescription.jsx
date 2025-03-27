@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -11,24 +11,41 @@ import {
   FaLayerGroup,
   FaUserTie,
 } from "react-icons/fa";
-import Navbar from "@/components/shared/Navbar";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { setSingleJob } from "@/redux/jobSlice";
+import { JOB_API_END_P0INT } from "@/utils/constant";
 
 const JobDescription = () => {
   const [isApplied, setIsApplied] = useState(false);
+  const {singleJob} = useSelector(store => store.job)
+  const {user} = useSelector(store => store.auth)
+  const dispatch = useDispatch();
+  const params = useParams();
+  const jobId = params.id;
 
-  // Mock Data
-  const jobDetails = {
-    role: "Frontend Developer",
-    description:
-      "We are looking for a passionate Frontend Developer who is proficient with React.js and Tailwind CSS. The role involves building dynamic and responsive web applications and collaborating with cross-functional teams.",
-    salary: "12 LPA",
-    experience: "2 - 4 years",
-    applicants: 120,
-    postedOn: "March 20, 2025",
-    positions: 5,
-    type: "Full-Time",
-  };
 
+  useEffect(() => {
+    const fetchJobById = async () => {
+      try {
+        const response = await axios.get(`${JOB_API_END_P0INT}/get/${jobId}`, {
+          withCredentials: true,
+        });
+        console.log("Res is" , response);
+        
+
+        if (response.data.success) {
+          dispatch(setSingleJob(response.data.job));
+        }
+      } catch (error) {
+        console.log("Error in fetchJobById", error);
+      }
+    };
+
+    fetchJobById();
+  }, [jobId ,dispatch, user?._id]);
+  
   // Apply Handler
   const handleApply = () => {
     setIsApplied(true);
@@ -39,7 +56,7 @@ const JobDescription = () => {
       {/* Header with Role & Apply Button */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-3xl font-bold text-gray-800 flex items-center gap-2">
-          <FaBriefcase className="text-blue-500" /> {jobDetails.role}
+          <FaBriefcase className="text-blue-500" /> {singleJob?.title}
         </h2>
         <Button
           onClick={handleApply}
@@ -64,8 +81,12 @@ const JobDescription = () => {
       <div className="space-y-6">
         {/* Description */}
         <div>
-          <h3 className="text-xl font-semibold text-gray-700 mb-2">📝 Description</h3>
-          <p className="text-gray-600 leading-relaxed">{jobDetails.description}</p>
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">
+            📝 Description
+          </h3>
+          <p className="text-gray-600 leading-relaxed">
+            {singleJob?.description}
+          </p>
         </div>
 
         {/* Salary and Experience */}
@@ -73,13 +94,14 @@ const JobDescription = () => {
           <div className="flex items-center gap-2">
             <FaRupeeSign className="text-green-500" />
             <p className="text-gray-700">
-              <span className="font-semibold">Salary:</span> {jobDetails.salary}
+              <span className="font-semibold">Salary:</span> {singleJob?.salary}
             </p>
           </div>
           <div className="flex items-center gap-2">
             <FaUserTie className="text-purple-500" />
             <p className="text-gray-700">
-              <span className="font-semibold">Experience:</span> {jobDetails.experience}
+              <span className="font-semibold">Experience:</span>{" "}
+              {singleJob?.experience} years
             </p>
           </div>
         </div>
@@ -89,13 +111,15 @@ const JobDescription = () => {
           <div className="flex items-center gap-2">
             <FaUsers className="text-blue-500" />
             <p className="text-gray-700">
-              <span className="font-semibold">Total Applicants:</span> {jobDetails.applicants}
+              <span className="font-semibold">Total Applicants:</span>{" "}
+              {singleJob?.applicants}
             </p>
           </div>
           <div className="flex items-center gap-2">
             <FaLayerGroup className="text-purple-500" />
             <p className="text-gray-700">
-              <span className="font-semibold">Positions:</span> {jobDetails.positions}
+              <span className="font-semibold">Positions:</span>{" "}
+              {singleJob?.position}
             </p>
           </div>
         </div>
@@ -105,7 +129,9 @@ const JobDescription = () => {
           <div className="flex items-center gap-2">
             <FaCalendarAlt className="text-yellow-500" />
             <p className="text-gray-700">
-              <span className="font-semibold">Posted On:</span> {jobDetails.postedOn}
+              <span className="font-semibold">Posted On:</span>{" "}
+              {singleJob?.createdAt.slice(0, 10).split("-").reverse().join("-")}
+
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -113,12 +139,12 @@ const JobDescription = () => {
             <Badge
               variant="outline"
               className={`${
-                jobDetails.type === "Full-Time"
+                singleJob?.jobType === "Full-Time"
                   ? "bg-green-100 text-green-700 border-green-300"
                   : "bg-yellow-100 text-yellow-700 border-yellow-300"
               }`}
             >
-              ⏰ {jobDetails.type}
+              ⏰ {singleJob?.jobType}
             </Badge>
           </div>
         </div>

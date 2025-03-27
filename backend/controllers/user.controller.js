@@ -7,6 +7,9 @@ import cloudinary from "../utils/cloudinary.js";
 export const signUp = async (req, res) => {
     try {
         const{fullName , email ,phone , password , role} = req.body;
+        const file = req.file
+        const fileuri = getDataUri(file)
+        const cloudResponse = await cloudinary.uploader.upload(fileuri.content)
 
 
         if(!fullName || !email || !phone || !password || !role){
@@ -31,7 +34,10 @@ export const signUp = async (req, res) => {
              email ,
              phone ,
              password: hashedPassword ,
-             role
+             role,
+             profile : {
+                profilePicture : cloudResponse.secure_url
+             }
             })
 
         return res.status(201).json({
@@ -132,7 +138,15 @@ export const updateProfile = async (req , res) =>{
 
         const fileuri = getDataUri(file);
 
-        const cloudResponse = await cloudinary.uploader.upload(fileuri.content)
+        const cloudResponse = await cloudinary.uploader.upload(fileuri.content, {
+            resource_type: "raw", // Correctly treats PDF as a raw file
+            public_id: `resumes/${file.originalname.split(".")[0]}`, // Keeps the original name (without extension)
+            format: "pdf", // Ensures it's treated as a PDF
+            use_filename: true, // Uses the original file name
+            unique_filename: false, // Prevents random name generation
+          });
+          
+          
       
 
       let skillsArray
@@ -154,6 +168,10 @@ export const updateProfile = async (req , res) =>{
       if(phone)  user.phone = phone 
       if(bio)  user.profile.bio = bio 
        if(skills) user.profile.skills = skillsArray 
+       if(cloudResponse){
+           user.profile.resume = cloudResponse.secure_url
+        user.profile.resumeOriginalName = file.originalname
+       }
 
         await user.save();
 

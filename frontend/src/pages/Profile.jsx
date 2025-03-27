@@ -8,6 +8,7 @@ import Navbar from "@/components/shared/Navbar";
 import AppliedJobs from "@/components/AppliedJobs";
 import EditProfileDialog from "@/components/EditProfileDialog";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
 const [open , setOpen] = useState(false)
@@ -33,7 +34,7 @@ const {user} = useSelector(store => store.auth)
       {/* Avatar & User Info */}
       <div className="flex items-center gap-6 mb-8">
         <Avatar className="w-28 h-28 shadow-lg">
-          {/* <AvatarImage src={profile.avatarUrl} alt={user?.fullname} /> */}
+          <AvatarImage src={user?.profile?.profilePicture} alt={user?.fullname} />
           <AvatarFallback>JD</AvatarFallback>
         </Avatar>
         <div>
@@ -49,7 +50,7 @@ const {user} = useSelector(store => store.auth)
 
       {/* Profile Information */}
       <div className="space-y-6">
-        {/* Role */}
+        {/* Phone */}
         <div className="flex items-center gap-2">
           <FaPhone className="text-green-500" />
           <p className="text-md text-gray-700">
@@ -87,9 +88,12 @@ const {user} = useSelector(store => store.auth)
         {/* Resume */}
         <div className="flex items-center gap-2">
           <FaFileAlt className="text-indigo-500" />
-          <div className="text-md text-gray-700 flex items-center gap-4 bg-gray-100 p-2 rounded-md shadow-sm">
-            📄 {user?.resume}
-          </div>
+          <Link 
+          to={user?.profile?.resume}
+          target="_blank" 
+          className="text-md text-gray-700 flex items-center gap-4 bg-gray-100 p-2 rounded-md shadow-sm">
+            📄 {user?.profile?.resumeOriginalName}
+          </Link>
         </div>
       </div>
     </div>
