@@ -9,8 +9,10 @@ import AppliedJobs from "@/components/AppliedJobs";
 import EditProfileDialog from "@/components/EditProfileDialog";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import useGetAppliedJobs from "@/hooks/useGetAllAppliedJobs";
 
 const Profile = () => {
+  useGetAppliedJobs()
 const [open , setOpen] = useState(false)
 const {user} = useSelector(store => store.auth)
 console.log("Profile is " , user);

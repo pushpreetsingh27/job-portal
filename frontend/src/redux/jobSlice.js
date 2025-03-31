@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     allJobs: [],
     singleJob : null,
-    allAdminJobs : []
+    allAdminJobs : [],
+    allAppliedJobs :[]
 }
 
 const jobSlice = createSlice({
@@ -18,9 +19,12 @@ const jobSlice = createSlice({
         },
         setAdminJobs : (state , action) =>{
             state.allAdminJobs = action.payload
-        }
+        },
+        setAllAppliedJobs : (state , action) =>{
+            state.allAppliedJobs = action.payload
+        },
     }
 })
 
-export const {setAllJobs, setSingleJob, setAdminJobs} = jobSlice.actions
+export const {setAllJobs, setSingleJob, setAdminJobs ,setAllAppliedJobs} = jobSlice.actions
 export default jobSlice.reducer

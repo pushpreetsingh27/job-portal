@@ -8,101 +8,75 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { FaBuilding, FaCalendarAlt, FaUserTie, FaCheckCircle } from "react-icons/fa";
+import {
+  FaBuilding,
+  FaCalendarAlt,
+  FaUserTie,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaClock,
+} from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const AppliedJobs = () => {
-  const jobData = [
-    {
-      id: 1,
-      companyName: "Google",
-      appliedOn: "2025-03-20",
-      role: "Frontend Developer",
-      status: "Approved",
-    },
-    {
-      id: 2,
-      companyName: "Microsoft",
-      appliedOn: "2025-03-18",
-      role: "UI/UX Designer",
-      status: "Pending",
-    },
-    {
-      id: 3,
-      companyName: "Amazon",
-      appliedOn: "2025-03-15",
-      role: "React Developer",
-      status: "Rejected",
-    },
-    {
-      id: 4,
-      companyName: "Meta",
-      appliedOn: "2025-03-10",
-      role: "Backend Developer",
-      status: "Approved",
-    },
-    {
-      id: 5,
-      companyName: "Apple",
-      appliedOn: "2025-03-05",
-      role: "Full Stack Developer",
-      status: "Pending",
-    },
-  ];
+  const { allAppliedJobs } = useSelector((store) => store.job);
 
-  // Status Color Mapping
+  // Function to get status badge with color
   const getStatusBadge = (status) => {
-    switch (status) {
-      case "Approved":
+    switch (status?.toLowerCase()) {
+      case "accepted":
         return (
-          <Badge className="bg-green-100 text-green-600 border-green-400">
+          <Badge className="bg-green-100 text-green-700 border-green-500">
             <FaCheckCircle className="mr-1" />
-            Approved
+            Accepted
           </Badge>
         );
-      case "Pending":
+      case "rejected":
         return (
-          <Badge className="bg-yellow-100 text-yellow-600 border-yellow-400">
-            ⏳ Pending
+          <Badge className="bg-red-100 text-red-700 border-red-500">
+            <FaTimesCircle className="mr-1" />
+            Rejected
           </Badge>
         );
-      case "Rejected":
+      case "pending":
         return (
-          <Badge className="bg-red-100 text-red-600 border-red-400">
-            ❌ Rejected
+          <Badge className="bg-yellow-100 text-yellow-700 border-yellow-500">
+            <FaClock className="mr-1" />
+            Pending
           </Badge>
         );
       default:
         return (
-          <Badge className="bg-gray-100 text-gray-600 border-gray-400">
-            ⏳ Pending
+          <Badge className="bg-gray-100 text-gray-700 border-gray-500">
+            Unknown
           </Badge>
         );
     }
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-8 bg-white shadow-lg rounded-lg border border-gray-200">
+    <div className="max-w-7xl mx-auto p-8 bg-white shadow-lg rounded-xl border border-gray-200 mt-10">
       {/* Header */}
       <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-    Applied Jobs
+        📄 Applied Jobs
       </h2>
 
-      {/* Table */}
+      {/* Table Container */}
       <div className="overflow-x-auto">
         <Table className="w-full border border-gray-100 rounded-lg">
           {/* Table Header */}
           <TableHeader className="bg-gray-100 text-gray-600">
             <TableRow>
               <TableHead className="text-left font-semibold text-gray-600">
-                <FaBuilding className="inline-block mr-2" />
+                <FaBuilding className="inline-block mr-2 text-gray-500" />
                 Company Name
               </TableHead>
               <TableHead className="text-left font-semibold text-gray-600">
-                <FaCalendarAlt className="inline-block mr-2" />
+                <FaCalendarAlt className="inline-block mr-2 text-gray-500" />
                 Applied On
               </TableHead>
               <TableHead className="text-left font-semibold text-gray-600">
-                <FaUserTie className="inline-block mr-2" />
+                <FaUserTie className="inline-block mr-2 text-gray-500" />
                 Role
               </TableHead>
               <TableHead className="text-left font-semibold text-gray-600">
@@ -113,25 +87,52 @@ const AppliedJobs = () => {
 
           {/* Table Body */}
           <TableBody>
-            {jobData.map((job) => (
-              <TableRow
-                key={job.id}
-                className="hover:bg-gray-50 transition duration-200"
-              >
-                <TableCell className="py-4 px-6 text-gray-700 font-medium">
-                  {job.companyName}
+            {allAppliedJobs.length > 0 ? (
+              allAppliedJobs.map((job) => (
+                <TableRow
+                  key={job.id}
+                  className="hover:bg-gray-50 transition duration-200"
+                >
+                  {/* Company Name */}
+                  <TableCell className="py-4 px-6 text-gray-700 font-medium">
+                    {job?.job?.company?.name || "N/A"}
+                  </TableCell>
+
+                  {/* Applied On */}
+                  <TableCell className="py-4 px-6 text-gray-500">
+                    {job?.createdAt?.split("T")[0] || "N/A"}
+                  </TableCell>
+
+                  {/* Role */}
+                  <TableCell className="py-4 px-6 text-gray-500">
+                    {job?.job?.title || "N/A"}
+                  </TableCell>
+
+                  {/* Status */}
+                  <TableCell className="py-4 px-6">
+                    {getStatusBadge(job?.status)}
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan="4"
+                  className="text-center py-6 text-gray-500"
+                >
+                  No jobs applied yet.
                 </TableCell>
-                <TableCell className="py-4 px-6 text-gray-500">
-                  {job.appliedOn}
-                </TableCell>
-                <TableCell className="py-4 px-6 text-gray-500">
-                  {job.role}
-                </TableCell>
-                <TableCell className="py-4 px-6">{getStatusBadge(job.status)}</TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
+      </div>
+
+      {/* Footer Section */}
+      <div className="text-center mt-6">
+        <p className="text-sm text-gray-500">
+          Showing {allAppliedJobs.length} applied job(s).
+        </p>
       </div>
     </div>
   );

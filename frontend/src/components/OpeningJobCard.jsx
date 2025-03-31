@@ -13,13 +13,13 @@ const OpeningJobCard = ({job}) => {
             <Button variant = "outline" className = "rounded-full" size = "icon"><FaRegBookmark /></Button>
         </div> */}
         <div className='flex items-center gap-2 my-2'>
-            {/* <Button variant = "outline" className = "rounded-full" size = "icon">
+            <Button variant = "outline" className = "rounded-full" size = "icon">
                 <Avatar>
-                    <AvatarImage className = "object-contain" src = "https://logos-world.net/wp-content/uploads/2020/06/Instagram-Logo.png"/>
+                    <AvatarImage className = "object-contain" src = {job?.company?.logo}/>
                 </Avatar>
-            </Button> */}
+            </Button>
             <div>
-                <h2 className='font-bold' >{job.company.name}</h2>
+                <h2 className='font-bold' >{job?.company?.name}</h2>
                 <p className='font-semibold text-gray-400'>India</p>
             </div>
 

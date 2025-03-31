@@ -10,6 +10,7 @@ import {
   import { Pencil, Trash2 } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { FaUserTie } from "react-icons/fa";
 
 
  
@@ -55,15 +56,24 @@ import { useNavigate } from "react-router-dom";
                   {job?.company?.name}
                   </TableCell>
                   <TableCell className="text-gray-600">  {job?.title}</TableCell>
+                  <TableCell className="text-gray-600">  {job?.createdAt.split("T")[0]}</TableCell>
                   <TableCell className="text-right">
-                    {/* <Button
+                    <Button
                     onClick = {() =>navigate(`/admin/companies/${job._id}`)}
                       size="sm"
                       className="mr-2 bg-black text-white "
                     >
                       <Pencil className="w-4 h-4 mr-1" />
                       Edit
-                    </Button> */}
+                    </Button>
+                    <Button
+                    onClick = {() =>navigate(`/admin/jobs/${job._id}/applicant`)}
+                      size="sm"
+                      className="mr-2 bg-blue-600 text-white "
+                    >
+                      <FaUserTie className="w-4 h-4 mr-1" />
+                        Applicant
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
