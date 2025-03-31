@@ -9,10 +9,18 @@ import { useNavigate } from 'react-router-dom';
 const Job = ({job}) => {
 const navigate = useNavigate()
 
+const postedAt = (mongoDate) =>{
+    const createdAt = new Date(mongoDate);
+    const current = new Date();
+    const diffTime = current - createdAt ;
+    return Math.floor(diffTime/(1000*24*60*60))
+
+}
+
   return (
     <div className="p-5 rounded-md shadow-xl bg-white border border-gray-100 ">
         <div className="flex items-center justify-between">
-            <p className='text-gray-400'>2 days ago</p>
+            <p className='text-gray-400'>{postedAt(job?.createdAt)=== 0  ? "Today" : `${postedAt(job?.createdAt)} days ago`}</p>
             <Button variant = "outline" className = "rounded-full" size = "icon"><FaRegBookmark /></Button>
         </div>
         <div className='flex items-center gap-2 my-2'>

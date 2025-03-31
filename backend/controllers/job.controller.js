@@ -61,7 +61,9 @@ export const getJobs = async (req, res) =>{
 export const getJobById = async (req, res) => {
     try {
         const jobId = req.params.id;
-        const job = await Job.findById(jobId);
+        const job = await Job.findById(jobId).populate({
+            path: "applications",
+        });
         if(!job){
             return res.status(404).json({
                 message: "Job not found",
@@ -83,7 +85,9 @@ export const getJobById = async (req, res) => {
  export const getJobPostedByAdmin = async (req, res) =>{
     try {
       const adminId = req.id  
-      const jobs = await Job.find({ createdBy : adminId })
+      const jobs = await Job.find({ createdBy : adminId }).populate({
+        path: "company",
+      })
       if(!jobs){
         return res.status(404).json({
             message: "No jobs posted by admin",

@@ -15,10 +15,12 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setSingleJob } from "@/redux/jobSlice";
-import { JOB_API_END_P0INT } from "@/utils/constant";
+import { APPLICATION_API_END_P0INT, JOB_API_END_P0INT } from "@/utils/constant";
+import toast from "react-hot-toast";
+import Navbar from "@/components/shared/Navbar";
 
 const JobDescription = () => {
-  const [isApplied, setIsApplied] = useState(false);
+const [applied , setApplied] = useState(false)
   const {singleJob} = useSelector(store => store.job)
   const {user} = useSelector(store => store.auth)
   const dispatch = useDispatch();
@@ -46,28 +48,50 @@ const JobDescription = () => {
     fetchJobById();
   }, [jobId ,dispatch, user?._id]);
   
-  // Apply Handler
-  const handleApply = () => {
-    setIsApplied(true);
-  };
+
+
+const isApplied = singleJob?.applications.some(application => application.applicant === user?._id) || false;
+
+
+
+const handleApplyJob = async () => {
+try {
+  const response = await axios.get(`${APPLICATION_API_END_P0INT}/apply/${jobId}` ,{
+    withCredentials: true
+  })
+  console.log(response.data);
+  
+  if(response.data.success){
+    toast.success("You have appplied to job sucessfully")
+    setApplied(true)
+    const updatedSingleJob = {...singleJob, applications:[...singleJob.applications,{applicant:user?._id}]}
+    dispatch(setSingleJob(updatedSingleJob)); 
+  }
+} catch (error) {
+  toast.error(error.response.data.message)
+}
+}
+
 
   return (
-    <div className="max-w-5xl mx-auto p-8 bg-white shadow-2xl mt-5 rounded-lg border border-gray-200">
+    <div>
+      <Navbar/>
+    <div className="max-w-7xl mx-auto p-8 bg-white shadow-2xl mt-5 rounded-lg border border-gray-200">
       {/* Header with Role & Apply Button */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-3xl font-bold text-gray-800 flex items-center gap-2">
           <FaBriefcase className="text-blue-500" /> {singleJob?.title}
         </h2>
         <Button
-          onClick={handleApply}
-          disabled={isApplied}
+     onClick = {handleApplyJob}
+           disabled={isApplied}
           className={`${
             isApplied
               ? "bg-green-500 text-white cursor-not-allowed"
               : "bg-blue-600 hover:bg-blue-700"
           } transition duration-200`}
         >
-          {isApplied ? (
+           {  applied || isApplied ? (
             <>
               <FaCheckCircle className="mr-2" /> Applied
             </>
@@ -112,7 +136,7 @@ const JobDescription = () => {
             <FaUsers className="text-blue-500" />
             <p className="text-gray-700">
               <span className="font-semibold">Total Applicants:</span>{" "}
-              {singleJob?.applicants}
+              {singleJob?.applications?.length}
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -149,6 +173,7 @@ const JobDescription = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

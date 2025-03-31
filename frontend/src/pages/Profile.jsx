@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 const Profile = () => {
 const [open , setOpen] = useState(false)
 const {user} = useSelector(store => store.auth)
+console.log("Profile is " , user);
 
  
 
