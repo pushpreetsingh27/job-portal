@@ -21,9 +21,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 const corsOptions = {
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173', 'https://job-portal-1-ukke.onrender.com'],
     credentials: true,
-}
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+};
 app.use(cors(corsOptions));
 
 const PORT =  process.env.PORT ||8000;
