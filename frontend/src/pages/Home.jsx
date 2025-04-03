@@ -1,4 +1,5 @@
-import CategoryCarousel from '@/components/CategoryCarousel'
+import HowItWorks from '@/components/HowItWorks'
+import CategoryCarousel from '@/components/HowItWorks'
 import DisplayJobs from '@/components/DisplayJobs'
 import HeroSection from '@/components/HeroSection'
 import Navbar from '@/components/shared/Navbar'
@@ -23,7 +24,8 @@ const Home = () => {
     <div>
         <Navbar/>
         <HeroSection/>
-        <CategoryCarousel/>
+        {/* <CategoryCarousel/> */}
+        <HowItWorks/>
         <DisplayJobs/>
     </div>
   )
